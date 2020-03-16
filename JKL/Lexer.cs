@@ -8,7 +8,6 @@ namespace JKL {
     class Lexer {
         Stream stream;
         StringBuilder builder = new StringBuilder();
-        int whitespaceCount = 0;
         int line = 1;
         int column = 0;
 
@@ -50,7 +49,7 @@ namespace JKL {
 
         Token ReadWhitespace() {
             int columnStart = column;
-            whitespaceCount = 0;
+            int whitespaceCount = 0;
 
             while (!reader.EndOfStream) {
                 char c = Peek();
