@@ -69,6 +69,8 @@ namespace JKL {
                 return ParseString();
             } else if (token.Type == TokenType.Number) {
                 return ParseNumber();
+            } else if (token.Type == TokenType.Bool) {
+                return ParseBool();
             }
 
             throw new NotImplementedException();
@@ -116,6 +118,11 @@ namespace JKL {
         Node ParseNumber() {
             var token = Read();
             return new Integer(long.Parse(token.Lexeme));
+        }
+
+        Node ParseBool() {
+            var token = Read();
+            return new Bool(bool.Parse(token.Lexeme));
         }
     }
 }

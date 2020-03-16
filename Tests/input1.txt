@@ -1,3 +1,4 @@
 ﻿key1:
     key2: "asdf"
     key3: 10
+    key4: true

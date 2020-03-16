@@ -11,7 +11,8 @@ namespace JKL {
         RightBracket,
         Colon,
         Number,
-        String
+        String,
+        Bool
     }
 
     class Token {

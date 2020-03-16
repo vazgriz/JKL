@@ -126,7 +126,16 @@ namespace JKL {
                 }
             }
 
-            return new Token(TokenType.Identifier, builder.ToString(), line, columnStart);
+            var lexeme = builder.ToString();
+            TokenType type;
+
+            if (lexeme == "true" || lexeme == "false") {
+                type = TokenType.Bool;
+            } else {
+                type = TokenType.Identifier;
+            }
+
+            return new Token(type, lexeme, line, columnStart);
         }
 
         public List<Token> Lex() {
