@@ -7,11 +7,11 @@ namespace JKL {
         None,
         Whitespace,
         Identifier,
+        LeftBracket,
+        RightBracket,
         Colon,
         Number,
-        String,
-        LeftBracket,
-        RightBracket
+        String
     }
 
     class Token {
