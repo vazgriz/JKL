@@ -10,7 +10,7 @@ namespace Tests {
         public void Test1() {
             using (FileStream stream = File.Open("input1.txt", FileMode.Open)) {
                 Parser parser = new Parser();
-                parser.Parse(stream);
+                var data = parser.Parse(stream);
             }
             Assert.Pass();
         }
