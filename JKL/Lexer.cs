@@ -5,7 +5,7 @@ using System.IO;
 using System.Collections;
 
 namespace JKL {
-    class Lexer : IEnumerable<Token> {
+    class Lexer {
         Stream stream;
         StringBuilder builder = new StringBuilder();
         int whitespaceCount = 0;
@@ -123,8 +123,10 @@ namespace JKL {
             return new Token(TokenType.Identifier, builder.ToString(), line, columnStart);
         }
 
-        public IEnumerator<Token> GetEnumerator() {
+        public List<Token> Lex() {
+            List<Token> results = new List<Token>();
             bool newline = false;
+
             using (reader = new StreamReader(stream, Encoding.UTF8, false)) {
                 while (!reader.EndOfStream) {
                     char c = Peek();
@@ -147,31 +149,28 @@ namespace JKL {
                         continue;
                     } else if (IsWhitespace(c)) {
                         if (newline) {
-                            yield return ReadWhitespace(column);
+                            results.Add(ReadWhitespace(column));
+                            newline = false;
+                        } else {
+                            Read();
                         }
                     } else if (c == ':') {
-                        yield return ReadChar(column, TokenType.Colon);
+                        results.Add(ReadChar(column, TokenType.Colon));
                     } else if (c == '[') {
-                        yield return ReadChar(column, TokenType.LeftBracket);
+                        results.Add(ReadChar(column, TokenType.LeftBracket));
                     } else if (c == ']') {
-                        yield return ReadChar(column, TokenType.RightBracket);
+                        results.Add(ReadChar(column, TokenType.RightBracket));
                     } else if (IsNumber(c)) {
-                        yield return ReadNumber(column);
+                        results.Add(ReadNumber(column));
                     } else if (c == '"') {
-                        yield return ReadString(column);
+                        results.Add(ReadString(column));
                     } else if (IsAlpha(c)) {
-                        yield return ReadIdentifier(column);
+                        results.Add(ReadIdentifier(column));
                     }
                 }
-
-                newline = false;
-
-                yield break;
             }
-        }
 
-        IEnumerator IEnumerable.GetEnumerator() {
-            throw new NotImplementedException();
+            return results;
         }
     }
 }

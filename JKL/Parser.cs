@@ -8,7 +8,12 @@ namespace JKL {
         public Node Parse(Stream stream) {
             Lexer lexer = new Lexer(stream);
 
-            foreach (var token in lexer) {
+            int line = 1;
+            foreach (var token in lexer.Lex()) {
+                if (token.Line != line) {
+                    line = token.Line;
+                    Console.WriteLine();
+                }
                 Console.Write("[{0}: {1}]", token.Type, token.Lexeme);
             }
 
