@@ -48,7 +48,8 @@ namespace JKL {
             this.stream = stream;
         }
 
-        Token ReadWhitespace(int columnStart) {
+        Token ReadWhitespace() {
+            int columnStart = column;
             whitespaceCount = 0;
 
             while (!reader.EndOfStream) {
@@ -66,12 +67,15 @@ namespace JKL {
             return new Token(TokenType.Whitespace, builder.ToString(), line, columnStart, whitespaceCount);
         }
 
-        Token ReadChar(int columnStart, TokenType type) {
+        Token ReadChar(TokenType type) {
+            int columnStart = column;
             char c = Read();
             return new Token(type, new string(c, 1), line, columnStart);
         }
 
-        Token ReadNumber(int columnStart) {
+        Token ReadNumber() {
+            int columnStart = column;
+
             while (!reader.EndOfStream) {
                 char c = Peek();
 
@@ -86,7 +90,8 @@ namespace JKL {
             return new Token(TokenType.Number, builder.ToString(), line, columnStart);
         }
 
-        Token ReadString(int columnStart) {
+        Token ReadString() {
+            int columnStart = column;
             bool foundEnd = false;
             Read(); //skip first "
 
@@ -108,7 +113,9 @@ namespace JKL {
             return new Token(TokenType.String, builder.ToString(), line, columnStart);
         }
 
-        Token ReadIdentifier(int columnStart) {
+        Token ReadIdentifier() {
+            int columnStart = column;
+
             while (!reader.EndOfStream) {
                 char c = Peek();
 
@@ -149,23 +156,23 @@ namespace JKL {
                         continue;
                     } else if (IsWhitespace(c)) {
                         if (newline) {
-                            results.Add(ReadWhitespace(column));
+                            results.Add(ReadWhitespace());
                             newline = false;
                         } else {
                             Read();
                         }
                     } else if (c == ':') {
-                        results.Add(ReadChar(column, TokenType.Colon));
+                        results.Add(ReadChar(TokenType.Colon));
                     } else if (c == '[') {
-                        results.Add(ReadChar(column, TokenType.LeftBracket));
+                        results.Add(ReadChar(TokenType.LeftBracket));
                     } else if (c == ']') {
-                        results.Add(ReadChar(column, TokenType.RightBracket));
+                        results.Add(ReadChar(TokenType.RightBracket));
                     } else if (IsNumber(c)) {
-                        results.Add(ReadNumber(column));
+                        results.Add(ReadNumber());
                     } else if (c == '"') {
-                        results.Add(ReadString(column));
+                        results.Add(ReadString());
                     } else if (IsAlpha(c)) {
-                        results.Add(ReadIdentifier(column));
+                        results.Add(ReadIdentifier());
                     }
                 }
             }
